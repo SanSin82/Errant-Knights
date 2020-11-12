@@ -20,7 +20,7 @@ except ModuleNotFoundError:
     from tkinter import ttk
 
 this = sys.modules[__name__]  # For holding module globals
-this.VersionNo = "3.0.2"
+this.VersionNo = "1"
 this.TodayData = {}
 this.DataIndex = 0
 this.Status = "Active"
@@ -39,11 +39,11 @@ def plugin_prefs(parent):
    """
 
     frame = nb.Frame(parent)
-    nb.Label(frame, text="BGS Tally v" + this.VersionNo).grid(column=0, sticky=tk.W)
+    nb.Label(frame, text="Errant Knights v" + this.VersionNo).grid(column=0, sticky=tk.W)
     """
    reset = nb.Button(frame, text="Reset Counter").place(x=0 , y=290)
    """
-    nb.Checkbutton(frame, text="Make BGS Tally Active", variable=this.Status, onvalue="Active",
+    nb.Checkbutton(frame, text="Make Errant Knights Active", variable=this.Status, onvalue="Active",
                    offvalue="Paused").grid()
     return frame
 
@@ -72,8 +72,6 @@ def plugin_start(plugin_dir):
                 this.TodayData[i] = this.TodayData[x]
                 del this.TodayData[x]
 
-
-
     this.LastTick = tk.StringVar(value=config.get("XLastTick"))
     this.TickTime = tk.StringVar(value=config.get("XTickTime"))
     this.Status = tk.StringVar(value=config.get("XStatus"))
@@ -88,9 +86,6 @@ def plugin_start(plugin_dir):
 
     # this.LastTick.set("12")
 
-    response = requests.get('https://api.github.com/repos/tezw21/BGS-Tally/releases/latest')  # check latest version
-    latest = response.json()
-    this.GitVersion = latest['tag_name']
     #  tick check and counter reset
     response = requests.get('https://elitebgs.app/api/ebgs/v4/ticks')  # get current tick and reset if changed
     tick = response.json()
@@ -105,7 +100,7 @@ def plugin_start(plugin_dir):
     # create google sheet
     google_sheet_int()
 
-    return "BGS Tally v2"
+    return "Errant Knights v1"
 
 
 def plugin_start3(plugin_dir):
@@ -125,15 +120,9 @@ def plugin_app(parent):
     """    Create a frame for the EDMC main window    """
     this.frame = tk.Frame(parent)
 
-    title = tk.Label(this.frame, text="BGS Tally v" + this.VersionNo)
+    title = tk.Label(this.frame, text="Errant Knights v" + this.VersionNo)
     title.grid(row=0, column=0, sticky=tk.W)
-    if version_tuple(this.GitVersion) > version_tuple(this.VersionNo):
-        title2 = tk.Label(this.frame, text="New version available", fg="blue", cursor="hand2")
-        title2.grid(row=0, column=1, sticky=tk.W, )
-        title2.bind("<Button-1>", lambda e: webbrowser.open_new("https://github.com/tezw21/BGS-Tally/releases"))
 
-    tk.Button(this.frame, text='Data Today', command=display_data).grid(row=0, column=1, padx=3)
-    tk.Button(this.frame, text='Mission Log').grid(row=0, column=2, padx=3)
     tk.Label(this.frame, text="Status:").grid(row=1, column=0, sticky=tk.W)
     tk.Label(this.frame, text="Last Tick:").grid(row=2, column=0, sticky=tk.W)
     this.Status_Label = tk.Label(this.frame, text=this.Status.get()).grid(row=1, column=1, sticky=tk.W)
@@ -266,7 +255,7 @@ def journal_entry(cmdr, is_beta, system, station, entry, index):
 
         try:
             gc = gspread.service_account(filename=this.cred)
-            sh = gc.open("BSG Tally Store")
+            sh = gc.open("DAILY UPDATE")
             worksheet = sh.worksheet("Master")
             system = this.TodayData[this.DataIndex.get()][0]['System']
             cell1 = worksheet.find(system)
@@ -402,7 +391,7 @@ def journal_entry(cmdr, is_beta, system, station, entry, index):
 
         try:
             gc = gspread.service_account(filename=this.cred)
-            sh = gc.open("BSG Tally Store")
+            sh = gc.open("DAILY UPDATE")
             worksheet = sh.worksheet("Master")
             system = this.TodayData[this.DataIndex.get()][0]['System']
             cell1 = worksheet.find(system)
@@ -516,7 +505,7 @@ def journal_entry(cmdr, is_beta, system, station, entry, index):
                                 sheet_commit_data(system, z, 'Mission', inf)
             save_data()
         gc = gspread.service_account(filename=this.cred)
-        sh = gc.open("BSG Tally Store")
+        sh = gc.open("DAILY UPDATE")
         worksheet = sh.worksheet("Mission")
         id = str(entry['MissionID'])
         cell1 = worksheet.find(id)
@@ -570,7 +559,7 @@ def journal_entry(cmdr, is_beta, system, station, entry, index):
 
     if entry['event'] == 'MissionAccepted':  # get mission influence value
         gc = gspread.service_account(filename=this.cred)
-        sh = gc.open("BSG Tally Store")
+        sh = gc.open("DAILY UPDATE")
         worksheet = sh.worksheet("Mission")
         str_list = list(filter(None, worksheet.col_values(1)))
         next_row = (len(str_list)+1)
@@ -585,7 +574,7 @@ def journal_entry(cmdr, is_beta, system, station, entry, index):
 
     if entry['event'] == 'MissionFailed':
         gc = gspread.service_account(filename=this.cred)
-        sh = gc.open("BSG Tally Store")
+        sh = gc.open("DAILY UPDATE")
         worksheet = sh.worksheet("Mission")
         id = str(entry['MissionID'])
         cell1 = worksheet.find(id)
@@ -649,84 +638,6 @@ def version_tuple(version):
     return ret
 
 
-def human_format(num):
-    num = float('{:.3g}'.format(num))
-    magnitude = 0
-    while abs(num) >= 1000:
-        magnitude += 1
-        num /= 1000.0
-    return '{}{}'.format('{:f}'.format(num).rstrip('0').rstrip('.'), ['', 'K', 'M', 'B', 'T'][magnitude])
-
-
-def display_data():
-    form = tk.Toplevel(this.frame)
-    form.title("BGS Tally v" + this.VersionNo + " - Data Today")
-    form.geometry("1000x560")
-    # tk.Label(this.frame, text="BGS Tally v" + this.VersionNo)
-
-    tab_parent = ttk.Notebook(form)
-
-    for i in this.TodayData:
-        tab = ttk.Frame(tab_parent)
-        tab_parent.add(tab, text=this.TodayData[i][0]['System'])
-        factionLabel = tk.Label(tab, text="Faction")
-        infLabel = tk.Label(tab, text="INF")
-        stLabel = tk.Label(tab, text="State")
-        psLabel = tk.Label(tab, text="PendingState")
-        bountyLabel = tk.Label(tab, text="Bounties")
-        bondLabel = tk.Label(tab, text="Bonds")
-        tpLabel = tk.Label(tab, text="Trade Profit")
-        bmLabel = tk.Label(tab, text="BM Profit")
-        mpLabel = tk.Label(tab, text="Mission Points")
-        mfLabel = tk.Label(tab, text="Mission Failed")
-        cdLabel = tk.Label(tab, text="Cart Data")
-        cmLabel = tk.Label(tab, text="Murders")
-        fbLabel = tk.Label(tab, text="Fines&Bounties")
-
-        factionLabel.grid(row=0, column=0)
-        infLabel.grid(row=0, column=1)
-        stLabel.grid(row=0, column=2)
-        psLabel.grid(row=0, column=3)
-        bountyLabel.grid(row=0, column=4)
-        bondLabel.grid(row=0, column=5)
-        tpLabel.grid(row=0, column=6)
-        bmLabel.grid(row=0, column=7)
-        mpLabel.grid(row=0, column=8)
-        mfLabel.grid(row=0, column=9)
-        cdLabel.grid(row=0, column=10)
-        cmLabel.grid(row=0, column=11)
-        fbLabel.grid(row=0, column=12)
-        z = len(this.TodayData[i][0]['Factions'])
-        for x in range(0, z):
-            factionname = tk.Label(tab, text=this.TodayData[i][0]['Factions'][x]['Faction'])
-            factionname.grid(row=x + 1, column=0, sticky=tk.W)
-            inf = tk.Label(tab, text=this.TodayData[i][0]['Factions'][x]['INF'])
-            inf.grid(row=x + 1, column=1)
-            State = tk.Label(tab, text=this.TodayData[i][0]['Factions'][x]['State'])
-            State.grid(row=x + 1, column=2)
-            PendingState = tk.Label(tab, text=this.TodayData[i][0]['Factions'][x]['PendingState'])
-            PendingState.grid(row=x + 1, column=3)
-            bounty = tk.Label(tab, text=human_format(this.TodayData[i][0]['Factions'][x]['Bounties']))
-            bounty.grid(row=x + 1, column=4)
-            bonds = tk.Label(tab, text=human_format(this.TodayData[i][0]['Factions'][x]['Bonds']))
-            bonds.grid(row=x + 1, column=5)
-            trade = tk.Label(tab, text=human_format(this.TodayData[i][0]['Factions'][x]['TradeProfit']))
-            trade.grid(row=x + 1, column=6)
-            bmtrade = tk.Label(tab, text=human_format(this.TodayData[i][0]['Factions'][x]['BMProfit']))
-            bmtrade.grid(row=x + 1, column=7)
-            missions = tk.Label(tab, text=this.TodayData[i][0]['Factions'][x]['MissionPoints'])
-            missions.grid(row=x + 1, column=8)
-            missionsf = tk.Label(tab, text=this.TodayData[i][0]['Factions'][x]['MissionFailed'])
-            missionsf.grid(row=x + 1, column=9)
-            cartdata = tk.Label(tab, text=human_format(this.TodayData[i][0]['Factions'][x]['CartData']))
-            cartdata.grid(row=x + 1, column=10)
-            murders = tk.Label(tab, text=human_format(this.TodayData[i][0]['Factions'][x]['Murders']))
-            murders.grid(row=x + 1, column=11)
-            fines = tk.Label(tab, text=human_format(this.TodayData[i][0]['Factions'][x]['Fines&Bounties']))
-            fines.grid(row=x + 1, column=12)
-    tab_parent.pack(expand=1, fill='both')
-
-
 def tick_format(TickTime):
     datetime1 = TickTime.split('T')
     x = datetime1[0]
@@ -758,7 +669,7 @@ def tick_format(TickTime):
         month = "Dec"
     date1 = y[2] + " " + month
     time1 = z[0:5]
-    datetimetick = time1 + ' UTC ' + date1
+    datetimetick = date1
     return datetimetick
 
 
@@ -783,11 +694,11 @@ def save_data():
 def google_sheet_int():
     # start google sheet data store
     gc = gspread.service_account(filename=this.cred)
-    sh = gc.open("BSG Tally Store")
+    sh = gc.open("DAILY UPDATE")
     try:
         worksheet = sh.worksheet(this.TickTime)
     except:
-        worksheet = sh.add_worksheet(title=this.TickTime, rows="2000", cols="20")
+        worksheet = sh.add_worksheet(title=this.TickTime, rows="5000", cols="16")
         worksheet.update('A1', '# of Systems')
         worksheet.update('B1', 0)
         set_column_width(worksheet, 'A', 270)
@@ -795,7 +706,7 @@ def google_sheet_int():
 
 def sheet_insert_new_system(index):
     gc = gspread.service_account(filename=this.cred)
-    sh = gc.open("BSG Tally Store")
+    sh = gc.open("DAILY UPDATE")
     worksheet = sh.worksheet(this.TickTime)
     factionname = []
     factioninf = []
@@ -887,7 +798,7 @@ def sheet_insert_new_system(index):
 
 def sheet_commit_data(system, index, event, data):
     gc = gspread.service_account(filename=this.cred)
-    sh = gc.open("BSG Tally Store")
+    sh = gc.open("DAILY UPDATE")
     worksheet = sh.worksheet(this.TickTime)
     cell1 = worksheet.find(system)
     factionrow = cell1.row + 2 + index
@@ -956,15 +867,6 @@ def sheet_commit_data(system, index, event, data):
         total = int(cell) + data
         worksheet.update_cell(factionrow, 14, total)
 
-    if event == "CZ Med":
-        cell = worksheet.cell(factionrow, 15).value
-        total = int(cell) + data
-        worksheet.update_cell(factionrow, 15, total)
-
-    if event == "CZ Low":
-        cell = worksheet.cell(factionrow, 16).value
-        total = int(cell) + data
-        worksheet.update_cell(factionrow, 16, total)
     if event == "CZ Med":
         cell = worksheet.cell(factionrow, 15).value
         total = int(cell) + data
