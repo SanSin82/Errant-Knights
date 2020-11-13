@@ -1,3 +1,4 @@
+
 import myNotebook as nb
 import sys
 import json
@@ -33,7 +34,7 @@ this.MasterGoal = ""
 this.MasterCZFaction = ""
 
 
-def plugin_prefs(parent):
+def plugin_prefs(parent, cmdr, is_beta):
     """
    Return a TK Frame for adding to the EDMC settings dialog.
    """
@@ -696,9 +697,9 @@ def google_sheet_int():
     gc = gspread.service_account(filename=this.cred)
     sh = gc.open("DAILY UPDATE")
     try:
-        worksheet = sh.worksheet(this.TickTime)
+        worksheet = sh.worksheet("Today")
     except:
-        worksheet = sh.add_worksheet(title=this.TickTime, rows="5000", cols="16")
+        worksheet = sh.add_worksheet(title="Today", rows="30000", cols="16")
         worksheet.update('A1', '# of Systems')
         worksheet.update('B1', 0)
         set_column_width(worksheet, 'A', 270)
@@ -707,7 +708,7 @@ def google_sheet_int():
 def sheet_insert_new_system(index):
     gc = gspread.service_account(filename=this.cred)
     sh = gc.open("DAILY UPDATE")
-    worksheet = sh.worksheet(this.TickTime)
+    worksheet = sh.worksheet("Today")
     factionname = []
     factioninf = []
     factionstate = []
@@ -799,7 +800,7 @@ def sheet_insert_new_system(index):
 def sheet_commit_data(system, index, event, data):
     gc = gspread.service_account(filename=this.cred)
     sh = gc.open("DAILY UPDATE")
-    worksheet = sh.worksheet(this.TickTime)
+    worksheet = sh.worksheet("Today")
     cell1 = worksheet.find(system)
     factionrow = cell1.row + 2 + index
     if event == "INF":
