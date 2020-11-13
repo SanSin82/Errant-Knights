@@ -202,7 +202,6 @@ def journal_entry(cmdr, is_beta, system, station, entry, index):
             for i in entry['Factions']:
                 if i['Name'] != "Pilots' Federation Local Branch":
                     inf = i['Influence'] * 100
-                    inf = round(inf, 2)
                     state = ''
                     pendingstate = ''
                     try:
@@ -230,7 +229,6 @@ def journal_entry(cmdr, is_beta, system, station, entry, index):
             for i in entry['Factions']:
                 if i['Name'] != "Pilots' Federation Local Branch":
                     inf = i['Influence'] * 100
-                    inf = round(inf, 2)
                     state = ''
                     pendingstate = ''
                     try:
@@ -338,7 +336,6 @@ def journal_entry(cmdr, is_beta, system, station, entry, index):
             for i in entry['Factions']:
                 if i['Name'] != "Pilots' Federation Local Branch":
                     inf = i['Influence'] * 100
-                    inf = round(inf, 2)
                     state = ''
                     pendingstate = ''
                     try:
@@ -366,7 +363,6 @@ def journal_entry(cmdr, is_beta, system, station, entry, index):
             for i in entry['Factions']:
                 if i['Name'] != "Pilots' Federation Local Branch":
                     inf = i['Influence'] * 100
-                    inf = round(inf, 2)
                     state = ''
                     pendingstate = ''
                     try:
