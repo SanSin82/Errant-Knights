@@ -288,13 +288,14 @@ def journal_entry(cmdr, is_beta, system, station, entry, index):
             tk.Label(this.frame, text="CZFaction:").grid(row=8, column=0, sticky=tk.W)
             this.MasterCZFaction_Label = tk.Label(this.frame, text=this.MasterCZFaction.get()).grid(row=8, column=1,
                                                                                                     sticky=tk.W)
-            theme.update(this.frame)
         except:
             this.MasterPriority.set('NONE')
             this.MasterFaction.set('NONE')
             this.MasterWork.set('NONE')
             this.MasterGoal.set('NONE')
             this.MasterCZFaction.set('NONE')
+            theme.update(this.frame)
+
 
     if entry['event'] == 'FSDJump':  # get factions at jump, load into today data, check tick and reset if needed
         try:
@@ -422,13 +423,14 @@ def journal_entry(cmdr, is_beta, system, station, entry, index):
             tk.Label(this.frame, text="CZFaction:").grid(row=8, column=0, sticky=tk.W)
             this.MasterCZFaction_Label = tk.Label(this.frame, text=this.MasterCZFaction.get()).grid(row=8, column=1,
                                                                                                     sticky=tk.W)
-            theme.update(this.frame)
         except:
             this.MasterPriority.set('NONE')
             this.MasterFaction.set('NONE')
             this.MasterWork.set('NONE')
             this.MasterGoal.set('NONE')
             this.MasterCZFaction.set('NONE')
+            theme.update(this.frame)
+
 
     if entry['event'] == 'RedeemVoucher' and entry['Type'] == 'bounty':  # bounties collected
         t = len(this.TodayData[this.DataIndex.get()][0]['Factions'])
