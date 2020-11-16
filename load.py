@@ -118,6 +118,7 @@ def plugin_app(parent):
     title = tk.Label(this.frame, text="Errant Knights v" + this.VersionNo)
     title.grid(row=0, column=0, sticky=tk.W)
 
+    tk.Button(this.frame, text='ORDERS', command=display_data).grid(row=0, column=1, padx=3)
     tk.Label(this.frame, text="Status:").grid(row=1, column=0, sticky=tk.W)
     tk.Label(this.frame, text="Last Tick:").grid(row=2, column=0, sticky=tk.W)
     this.Status_Label = tk.Label(this.frame, text=this.Status.get()).grid(row=1, column=1, sticky=tk.W)
@@ -669,7 +670,7 @@ def sheet_insert_new_system(index):
     mfaction = '=iferror(vlookup(indirect("b"&row(),true),Master!$A:$F,3,false),"NONE")'
     mwork = '=iferror(vlookup(indirect("b"&row(),true),Master!$A:$F,4,false),"NONE")'
     mgoal = '=iferror(vlookup(indirect("b"&row(),true),Master!$A:$F,5,false),"NONE")'
-    mcz = '=iferror(vlookup(indirect("b"&row(),true),Master!$A:$F,6,false),"NONE")'                                                                                         
+    mcz = '=iferror(vlookup(indirect("b"&row(),true),Master!$A:$F,6,false),"NONE")'
     try:
         cell = worksheet.find(system)
     except gspread.exceptions.CellNotFound:
@@ -827,3 +828,73 @@ def sheet_commit_data(system, index, event, data):
         cell = worksheet.cell(factionrow, 16).value
         total = int(cell) + data
         worksheet.update_cell(factionrow, 16, total)
+
+
+def display_data():
+    form = tk.Toplevel(this.frame)
+    form.title("Errant Knights Orders")
+    form.geometry("800x1000")
+    # tk.Label(this.frame, text="BGS Tally v" + this.VersionNo)
+
+    tab_parent = ttk.Notebook(form)
+    tab = ttk.Frame(tab_parent)
+    tab_parent.add(tab, text="ORDERS")
+    systemLabel = tk.Label(tab, text="System").grid(row=0, column=0)
+    gc = gspread.service_account(filename=this.cred)
+    sh = gc.open("DAILY UPDATE")
+    worksheet = sh.worksheet("Orders")
+    acell = worksheet.row_values(2)
+    bcell = worksheet.row_values(3)
+    ccell = worksheet.row_values(4)
+    dcell = worksheet.row_values(5)
+    ecell = worksheet.row_values(6)
+    fcell = worksheet.row_values(7)
+    gcell = worksheet.row_values(8)
+    hcell = worksheet.row_values(9)
+    icell = worksheet.row_values(10)
+    jcell = worksheet.row_values(11)
+    kcell = worksheet.row_values(12)
+    lcell = worksheet.row_values(13)
+    mcell = worksheet.row_values(14)
+    ncell = worksheet.row_values(15)
+    ocell = worksheet.row_values(16)
+    pcell = worksheet.row_values(17)
+    qcell = worksheet.row_values(18)
+    rcell = worksheet.row_values(19)
+    scell = worksheet.row_values(20)
+    tcell = worksheet.row_values(21)
+    ucell = worksheet.row_values(22)
+    vcell = worksheet.row_values(23)
+    wcell = worksheet.row_values(24)
+    xcell = worksheet.row_values(25)
+    ycell = worksheet.row_values(26)
+    zcell = worksheet.row_values(27)
+
+    system_a = tk.Label(tab, text= acell).grid(row=1, column=0)
+    system_b = tk.Label(tab, text= bcell).grid(row=2, column=0)
+    system_c = tk.Label(tab, text= ccell).grid(row=3, column=0)
+    system_d = tk.Label(tab, text= dcell).grid(row=4, column=0)
+    system_e = tk.Label(tab, text= ecell).grid(row=5, column=0)
+    system_f = tk.Label(tab, text= fcell).grid(row=6, column=0)
+    system_g = tk.Label(tab, text= gcell).grid(row=7, column=0)
+    system_h = tk.Label(tab, text= hcell).grid(row=8, column=0)
+    system_i = tk.Label(tab, text= icell).grid(row=9, column=0)
+    system_j = tk.Label(tab, text= jcell).grid(row=10, column=0)
+    system_k = tk.Label(tab, text= kcell).grid(row=11, column=0)
+    system_l = tk.Label(tab, text= lcell).grid(row=12, column=0)
+    system_m = tk.Label(tab, text= mcell).grid(row=13, column=0)
+    system_n = tk.Label(tab, text= ncell).grid(row=14, column=0)
+    system_o = tk.Label(tab, text= ocell).grid(row=15, column=0)
+    system_p = tk.Label(tab, text= pcell).grid(row=16, column=0)
+    system_q = tk.Label(tab, text= qcell).grid(row=17, column=0)
+    system_r = tk.Label(tab, text= rcell).grid(row=18, column=0)
+    system_s = tk.Label(tab, text= scell).grid(row=19, column=0)
+    system_t = tk.Label(tab, text= tcell).grid(row=20, column=0)
+    system_u = tk.Label(tab, text= ucell).grid(row=21, column=0)
+    system_v = tk.Label(tab, text= vcell).grid(row=22, column=0)
+    system_w = tk.Label(tab, text= wcell).grid(row=23, column=0)
+    system_x = tk.Label(tab, text= xcell).grid(row=24, column=0)
+    system_y = tk.Label(tab, text= ycell).grid(row=25, column=0)
+    system_z = tk.Label(tab, text= zcell).grid(row=26, column=0)
+
+    tab_parent.pack(expand=1, fill='both')
