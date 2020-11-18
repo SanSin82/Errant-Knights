@@ -831,15 +831,43 @@ def sheet_commit_data(system, index, event, data):
 
 
 def display_data():
+    color='#fa8100'
     form = tk.Toplevel(this.frame)
     form.title("Errant Knights Orders")
-    form.geometry("800x1000")
-    # tk.Label(this.frame, text="BGS Tally v" + this.VersionNo)
+    style = ttk.Style()
 
+    style.theme_create('pastel', settings={
+        ".": {
+            "configure": {
+                "background": '#000000', # All except tabs
+                "font": '#fa8100'
+            }
+        },
+        "TNotebook": {
+            "configure": {
+                "background":'#ffffff', # Your margin color
+                "tabmargins": [2, 5, 0, 0], # margins: left, top, right, separator
+            }
+        },
+        "TNotebook.Tab": {
+            "configure": {
+                "background": '#ffffff', # tab color when not selected
+                "padding": [10, 2], # [space between text and horizontal tab-button border, space between text and vertical tab_button border]
+                "font":'#fa8100'
+            },
+            "map": {
+                "background": [("selected", '#ffffff')], # Tab color when selected
+                "expand": [("selected", [1, 1, 1, 0])] # text margins
+            }
+        }
+    })
+
+    style.theme_use('pastel')
+    form.geometry("1200x1200")
     tab_parent = ttk.Notebook(form)
     tab = ttk.Frame(tab_parent)
     tab_parent.add(tab, text="ORDERS")
-    systemLabel = tk.Label(tab, text="System").grid(row=0, column=0)
+    systemLabel = tk.Label(tab, text="System",fg=color, bg='black').grid(row=0, column=0)
     gc = gspread.service_account(filename=this.cred)
     sh = gc.open("DAILY UPDATE")
     worksheet = sh.worksheet("Orders")
@@ -870,31 +898,31 @@ def display_data():
     ycell = worksheet.row_values(26)
     zcell = worksheet.row_values(27)
 
-    system_a = tk.Label(tab, text= acell).grid(row=1, column=0)
-    system_b = tk.Label(tab, text= bcell).grid(row=2, column=0)
-    system_c = tk.Label(tab, text= ccell).grid(row=3, column=0)
-    system_d = tk.Label(tab, text= dcell).grid(row=4, column=0)
-    system_e = tk.Label(tab, text= ecell).grid(row=5, column=0)
-    system_f = tk.Label(tab, text= fcell).grid(row=6, column=0)
-    system_g = tk.Label(tab, text= gcell).grid(row=7, column=0)
-    system_h = tk.Label(tab, text= hcell).grid(row=8, column=0)
-    system_i = tk.Label(tab, text= icell).grid(row=9, column=0)
-    system_j = tk.Label(tab, text= jcell).grid(row=10, column=0)
-    system_k = tk.Label(tab, text= kcell).grid(row=11, column=0)
-    system_l = tk.Label(tab, text= lcell).grid(row=12, column=0)
-    system_m = tk.Label(tab, text= mcell).grid(row=13, column=0)
-    system_n = tk.Label(tab, text= ncell).grid(row=14, column=0)
-    system_o = tk.Label(tab, text= ocell).grid(row=15, column=0)
-    system_p = tk.Label(tab, text= pcell).grid(row=16, column=0)
-    system_q = tk.Label(tab, text= qcell).grid(row=17, column=0)
-    system_r = tk.Label(tab, text= rcell).grid(row=18, column=0)
-    system_s = tk.Label(tab, text= scell).grid(row=19, column=0)
-    system_t = tk.Label(tab, text= tcell).grid(row=20, column=0)
-    system_u = tk.Label(tab, text= ucell).grid(row=21, column=0)
-    system_v = tk.Label(tab, text= vcell).grid(row=22, column=0)
-    system_w = tk.Label(tab, text= wcell).grid(row=23, column=0)
-    system_x = tk.Label(tab, text= xcell).grid(row=24, column=0)
-    system_y = tk.Label(tab, text= ycell).grid(row=25, column=0)
-    system_z = tk.Label(tab, text= zcell).grid(row=26, column=0)
+    system_a = tk.Label(tab, text= acell,fg=color, bg='black').grid(row=1, column=0)
+    system_b = tk.Label(tab, text= bcell,fg=color, bg='black').grid(row=2, column=0)
+    system_c = tk.Label(tab, text= ccell,fg=color, bg='black').grid(row=3, column=0)
+    system_d = tk.Label(tab, text= dcell,fg=color, bg='black').grid(row=4, column=0)
+    system_e = tk.Label(tab, text= ecell,fg=color, bg='black').grid(row=5, column=0)
+    system_f = tk.Label(tab, text= fcell,fg=color, bg='black').grid(row=6, column=0)
+    system_g = tk.Label(tab, text= gcell,fg=color, bg='black').grid(row=7, column=0)
+    system_h = tk.Label(tab, text= hcell,fg=color, bg='black').grid(row=8, column=0)
+    system_i = tk.Label(tab, text= icell,fg=color, bg='black').grid(row=9, column=0)
+    system_j = tk.Label(tab, text= jcell,fg=color, bg='black').grid(row=10, column=0)
+    system_k = tk.Label(tab, text= kcell,fg=color, bg='black').grid(row=11, column=0)
+    system_l = tk.Label(tab, text= lcell,fg=color, bg='black').grid(row=12, column=0)
+    system_m = tk.Label(tab, text= mcell,fg=color, bg='black').grid(row=13, column=0)
+    system_n = tk.Label(tab, text= ncell,fg=color, bg='black').grid(row=14, column=0)
+    system_o = tk.Label(tab, text= ocell,fg=color, bg='black').grid(row=15, column=0)
+    system_p = tk.Label(tab, text= pcell,fg=color, bg='black').grid(row=16, column=0)
+    system_q = tk.Label(tab, text= qcell,fg=color, bg='black').grid(row=17, column=0)
+    system_r = tk.Label(tab, text= rcell,fg=color, bg='black').grid(row=18, column=0)
+    system_s = tk.Label(tab, text= scell,fg=color, bg='black').grid(row=19, column=0)
+    system_t = tk.Label(tab, text= tcell,fg=color, bg='black').grid(row=20, column=0)
+    system_u = tk.Label(tab, text= ucell,fg=color, bg='black').grid(row=21, column=0)
+    system_v = tk.Label(tab, text= vcell,fg=color, bg='black').grid(row=22, column=0)
+    system_w = tk.Label(tab, text= wcell,fg=color, bg='black').grid(row=23, column=0)
+    system_x = tk.Label(tab, text= xcell,fg=color, bg='black').grid(row=24, column=0)
+    system_y = tk.Label(tab, text= ycell,fg=color, bg='black').grid(row=25, column=0)
+    system_z = tk.Label(tab, text= zcell,fg=color, bg='black').grid(row=26, column=0)
 
     tab_parent.pack(expand=1, fill='both')
