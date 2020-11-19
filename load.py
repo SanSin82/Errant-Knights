@@ -854,7 +854,7 @@ def display_data():
     form = tk.Toplevel(this.frame)
     form.title("Errant Knights Orders")
     style.theme_use('dark')
-    form.geometry("1200x1200")
+    form.geometry("900x900")
     tab_parent = ttk.Notebook(form)
     tab = ttk.Frame(tab_parent)
     tab_parent.add(tab, text="ORDERS")
