@@ -1,4 +1,3 @@
-
 import myNotebook as nb
 import sys
 import json
@@ -208,69 +207,72 @@ def journal_entry(cmdr, is_beta, system, station, entry, index):
         google_sheet_int()
         # today data creation
         x = len(this.TodayData)
-        if x >= 1:
-            for y in range(1, x + 1):
-                if entry['StarSystem'] == this.TodayData[y][0]['System']:
-                    this.DataIndex.set(y)
-                    print('system in data')
-                    sheet_insert_new_system(y)
-                    return
-            this.TodayData[x + 1] = [{'System': entry['StarSystem'], 'SystemAddress': entry['SystemAddress'],
-                                      'Factions': []}]
-            this.DataIndex.set(x + 1)
+        try:
+            if x >= 1:
+                for y in range(1, x + 1):
+                    if entry['StarSystem'] == this.TodayData[y][0]['System']:
+                        this.DataIndex.set(y)
+                        print('system in data')
+                        sheet_insert_new_system(y)
+                        return
+                this.TodayData[x + 1] = [{'System': entry['StarSystem'], 'SystemAddress': entry['SystemAddress'],
+                                          'Factions': []}]
+                this.DataIndex.set(x + 1)
 
-            for i in entry['Factions']:
-                if i['Name'] != "Pilots' Federation Local Branch":
-                    inf = i['Influence'] * 100
-                    state = ''
-                    pendingstate = ''
-                    try:
-                        for z in i['ActiveStates']:
-                            state = state + z['State'] + ' '
-                    except KeyError:
-                        state = 'None'
-                    try:
-                        for z in i['PendingStates']:
-                            pendingstate = pendingstate + z['State'] + ' '
-                    except KeyError:
-                        pendingstate = 'None'
+                for i in entry['Factions']:
+                    if i['Name'] != "Pilots' Federation Local Branch":
+                        inf = i['Influence'] * 100
+                        state = ''
+                        pendingstate = ''
+                        try:
+                            for z in i['ActiveStates']:
+                                state = state + z['State'] + ' '
+                        except KeyError:
+                            state = 'None'
+                        try:
+                            for z in i['PendingStates']:
+                                pendingstate = pendingstate + z['State'] + ' '
+                        except KeyError:
+                            pendingstate = 'None'
 
-                    this.TodayData[x + 1][0]['Factions'].append({'Faction': i['Name'], 'INF': inf, 'State': state,
-                                                                 'PendingState': pendingstate, 'Bounties': 0,
-                                                                 'Bonds': 0, 'TradeProfit': 0, 'BMProfit': 0,
-                                                                 'MissionPoints': 0, 'MissionFailed': 0, 'CartData': 0,
-                                                                 'Murders': 0, 'Fines&Bounties': 0, 'CZ High': 0,
-                                                                 'CZ Med': 0,
-                                                                 'CZ Low': 0})
-        else:
-            this.TodayData = {1: [{'System': entry['StarSystem'],
-                                   'SystemAddress': entry['SystemAddress'], 'Factions': []}]}
-            this.DataIndex.set(1)
-            for i in entry['Factions']:
-                if i['Name'] != "Pilots' Federation Local Branch":
-                    inf = i['Influence'] * 100
-                    state = ''
-                    pendingstate = ''
-                    try:
-                        for z in i['ActiveStates']:
-                            state = state + z['State'] + ' '
-                    except KeyError:
-                        state = 'None'
-                    try:
-                        for z in i['PendingStates']:
-                            pendingstate = pendingstate + z['State'] + ' '
-                    except KeyError:
-                        pendingstate = 'None'
+                        this.TodayData[x + 1][0]['Factions'].append({'Faction': i['Name'], 'INF': inf, 'State': state,
+                                                                     'PendingState': pendingstate, 'Bounties': 0,
+                                                                     'Bonds': 0, 'TradeProfit': 0, 'BMProfit': 0,
+                                                                     'MissionPoints': 0, 'MissionFailed': 0, 'CartData': 0,
+                                                                     'Murders': 0, 'Fines&Bounties': 0, 'CZ High': 0,
+                                                                     'CZ Med': 0,
+                                                                     'CZ Low': 0})
+            else:
+                this.TodayData = {1: [{'System': entry['StarSystem'],
+                                       'SystemAddress': entry['SystemAddress'], 'Factions': []}]}
+                this.DataIndex.set(1)
+                for i in entry['Factions']:
+                    if i['Name'] != "Pilots' Federation Local Branch":
+                        inf = i['Influence'] * 100
+                        state = ''
+                        pendingstate = ''
+                        try:
+                            for z in i['ActiveStates']:
+                                state = state + z['State'] + ' '
+                        except KeyError:
+                            state = 'None'
+                        try:
+                            for z in i['PendingStates']:
+                                pendingstate = pendingstate + z['State'] + ' '
+                        except KeyError:
+                            pendingstate = 'None'
 
-                    this.TodayData[x + 1][0]['Factions'].append({'Faction': i['Name'], 'INF': inf, 'State': state,
-                                                                 'PendingState': pendingstate, 'Bounties': 0,
-                                                                 'Bonds': 0, 'TradeProfit': 0, 'BMProfit': 0,
-                                                                 'MissionPoints': 0, 'MissionFailed': 0, 'CartData': 0,
-                                                                 'Murders': 0, 'Fines&Bounties': 0, 'CZ High': 0,
-                                                                 'CZ Med': 0,
-                                                                 'CZ Low': 0})
+                        this.TodayData[x + 1][0]['Factions'].append({'Faction': i['Name'], 'INF': inf, 'State': state,
+                                                                     'PendingState': pendingstate, 'Bounties': 0,
+                                                                     'Bonds': 0, 'TradeProfit': 0, 'BMProfit': 0,
+                                                                     'MissionPoints': 0, 'MissionFailed': 0, 'CartData': 0,
+                                                                     'Murders': 0, 'Fines&Bounties': 0, 'CZ High': 0,
+                                                                     'CZ Med': 0,
+                                                                     'CZ Low': 0})
 
-        sheet_insert_new_system(x + 1)  # insert data into google sheet
+        except KeyError:
+
+            sheet_insert_new_system(x + 1)  # insert data into google sheet
 
         try:
             gc = gspread.service_account(filename=this.cred)
@@ -320,69 +322,72 @@ def journal_entry(cmdr, is_beta, system, station, entry, index):
         google_sheet_int()
         # today data creation
         x = len(this.TodayData)
-        if x >= 1:
-            for y in range(1, x + 1):
-                if entry['StarSystem'] == this.TodayData[y][0]['System']:
-                    this.DataIndex.set(y)
-                    print('system in data')
-                    sheet_insert_new_system(y)
-                    return
-            this.TodayData[x + 1] = [{'System': entry['StarSystem'], 'SystemAddress': entry['SystemAddress'],
-                                      'Factions': []}]
-            this.DataIndex.set(x + 1)
+        try:
+            if x >= 1:
+                for y in range(1, x + 1):
+                    if entry['StarSystem'] == this.TodayData[y][0]['System']:
+                        this.DataIndex.set(y)
+                        print('system in data')
+                        sheet_insert_new_system(y)
+                        return
+                this.TodayData[x + 1] = [{'System': entry['StarSystem'], 'SystemAddress': entry['SystemAddress'],
+                                          'Factions': []}]
+                this.DataIndex.set(x + 1)
 
-            for i in entry['Factions']:
-                if i['Name'] != "Pilots' Federation Local Branch":
-                    inf = i['Influence'] * 100
-                    state = ''
-                    pendingstate = ''
-                    try:
-                        for z in i['ActiveStates']:
-                            state = state + z['State'] + ' '
-                    except KeyError:
-                        state = 'None'
-                    try:
-                        for z in i['PendingStates']:
-                            pendingstate = pendingstate + z['State'] + ' '
-                    except KeyError:
-                        pendingstate = 'None'
+                for i in entry['Factions']:
+                    if i['Name'] != "Pilots' Federation Local Branch":
+                        inf = i['Influence'] * 100
+                        state = ''
+                        pendingstate = ''
+                        try:
+                            for z in i['ActiveStates']:
+                                state = state + z['State'] + ' '
+                        except KeyError:
+                            state = 'None'
+                        try:
+                            for z in i['PendingStates']:
+                                pendingstate = pendingstate + z['State'] + ' '
+                        except KeyError:
+                            pendingstate = 'None'
 
-                    this.TodayData[x + 1][0]['Factions'].append({'Faction': i['Name'], 'INF': inf, 'State': state,
-                                                                 'PendingState': pendingstate, 'Bounties': 0,
-                                                                 'Bonds': 0, 'TradeProfit': 0, 'BMProfit': 0,
-                                                                 'MissionPoints': 0, 'MissionFailed': 0, 'CartData': 0,
-                                                                 'Murders': 0, 'Fines&Bounties': 0, 'CZ High': 0,
-                                                                 'CZ Med': 0,
-                                                                 'CZ Low': 0})
-        else:
-            this.TodayData = {1: [{'System': entry['StarSystem'],
-                                   'SystemAddress': entry['SystemAddress'], 'Factions': []}]}
-            this.DataIndex.set(1)
-            for i in entry['Factions']:
-                if i['Name'] != "Pilots' Federation Local Branch":
-                    inf = i['Influence'] * 100
-                    state = ''
-                    pendingstate = ''
-                    try:
-                        for z in i['ActiveStates']:
-                            state = state + z['State'] + ' '
-                    except KeyError:
-                        state = 'None'
-                    try:
-                        for z in i['PendingStates']:
-                            pendingstate = pendingstate + z['State'] + ' '
-                    except KeyError:
-                        pendingstate = 'None'
+                        this.TodayData[x + 1][0]['Factions'].append({'Faction': i['Name'], 'INF': inf, 'State': state,
+                                                                     'PendingState': pendingstate, 'Bounties': 0,
+                                                                     'Bonds': 0, 'TradeProfit': 0, 'BMProfit': 0,
+                                                                     'MissionPoints': 0, 'MissionFailed': 0, 'CartData': 0,
+                                                                     'Murders': 0, 'Fines&Bounties': 0, 'CZ High': 0,
+                                                                     'CZ Med': 0,
+                                                                     'CZ Low': 0})
+            else:
+                this.TodayData = {1: [{'System': entry['StarSystem'],
+                                       'SystemAddress': entry['SystemAddress'], 'Factions': []}]}
+                this.DataIndex.set(1)
+                for i in entry['Factions']:
+                    if i['Name'] != "Pilots' Federation Local Branch":
+                        inf = i['Influence'] * 100
+                        state = ''
+                        pendingstate = ''
+                        try:
+                            for z in i['ActiveStates']:
+                                state = state + z['State'] + ' '
+                        except KeyError:
+                            state = 'None'
+                        try:
+                            for z in i['PendingStates']:
+                                pendingstate = pendingstate + z['State'] + ' '
+                        except KeyError:
+                            pendingstate = 'None'
 
-                    this.TodayData[x + 1][0]['Factions'].append({'Faction': i['Name'], 'INF': inf, 'State': state,
-                                                                 'PendingState': pendingstate, 'Bounties': 0,
-                                                                 'Bonds': 0, 'TradeProfit': 0, 'BMProfit': 0,
-                                                                 'MissionPoints': 0, 'MissionFailed': 0, 'CartData': 0,
-                                                                 'Murders': 0, 'Fines&Bounties': 0, 'CZ High': 0,
-                                                                 'CZ Med': 0,
-                                                                 'CZ Low': 0})
+                        this.TodayData[x + 1][0]['Factions'].append({'Faction': i['Name'], 'INF': inf, 'State': state,
+                                                                     'PendingState': pendingstate, 'Bounties': 0,
+                                                                     'Bonds': 0, 'TradeProfit': 0, 'BMProfit': 0,
+                                                                     'MissionPoints': 0, 'MissionFailed': 0, 'CartData': 0,
+                                                                     'Murders': 0, 'Fines&Bounties': 0, 'CZ High': 0,
+                                                                     'CZ Med': 0,
+                                                                     'CZ Low': 0})
 
-        sheet_insert_new_system(x + 1)  # insert data into google sheet
+        except KeyError:
+
+            sheet_insert_new_system(x + 1)  # insert data into google sheet
 
         try:
             gc = gspread.service_account(filename=this.cred)
