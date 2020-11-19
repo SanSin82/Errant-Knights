@@ -481,13 +481,16 @@ def journal_entry(cmdr, is_beta, system, station, entry, index):
                                 this.TodayData[y][0]['Factions'][z]['MissionPoints'] += inf
                                 sheet_commit_data(system, z, 'Mission', inf)
             save_data()
-        gc = gspread.service_account(filename=this.cred)
-        sh = gc.open("DAILY UPDATE")
-        worksheet = sh.worksheet("Mission")
-        id = str(entry['MissionID'])
-        cell1 = worksheet.find(id)
-        missionrow = cell1.row
-        worksheet.delete_row(missionrow)
+        try:
+            gc = gspread.service_account(filename=this.cred)
+            sh = gc.open("DAILY UPDATE")
+            worksheet = sh.worksheet("Mission")
+            id = str(entry['MissionID'])
+            cell1 = worksheet.find(id)
+            missionrow = cell1.row
+            worksheet.delete_row(missionrow)
+        except:
+            gspread.exceptions.CellNotFound
 
     if entry['event'] == 'SellExplorationData' or entry['event'] == "MultiSellExplorationData":  # get carto data value
         t = len(this.TodayData[this.DataIndex.get()][0]['Factions'])
