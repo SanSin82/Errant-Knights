@@ -34,6 +34,34 @@ this.MasterWork = tk.StringVar()
 this.MasterGoal = tk.StringVar()
 this.MasterCZFaction = tk.StringVar()
 
+style = ttk.Style()
+
+style.theme_create('dark', settings={
+    ".": {
+        "configure": {
+            "background": '#000000', # All except tabs
+            "font": '#000000'
+        }
+    },
+    "TNotebook": {
+        "configure": {
+            "background":'#000000', # Your margin color
+            "tabmargins": [2, 5, 0, 0], # margins: left, top, right, separator
+        }
+    },
+    "TNotebook.Tab": {
+        "configure": {
+            "background": '#ffffff', # tab color when not selected
+            "padding": [10, 2], # [space between text and horizontal tab-button border, space between text and vertical tab_button border]
+            "font":'#000000'
+        },
+        "map": {
+            "background": [("selected", '#ffffff')], # Tab color when selected
+            "expand": [("selected", [1, 1, 1, 0])] # text margins
+        }
+    }
+})
+
 def plugin_prefs(parent, cmdr, is_beta):
     """
    Return a TK Frame for adding to the EDMC settings dialog.
@@ -825,35 +853,7 @@ def display_data():
     color='#fa8100'
     form = tk.Toplevel(this.frame)
     form.title("Errant Knights Orders")
-    style = ttk.Style()
-
-    style.theme_create('pastel', settings={
-        ".": {
-            "configure": {
-                "background": '#000000', # All except tabs
-                "font": '#fa8100'
-            }
-        },
-        "TNotebook": {
-            "configure": {
-                "background":'#ffffff', # Your margin color
-                "tabmargins": [2, 5, 0, 0], # margins: left, top, right, separator
-            }
-        },
-        "TNotebook.Tab": {
-            "configure": {
-                "background": '#ffffff', # tab color when not selected
-                "padding": [10, 2], # [space between text and horizontal tab-button border, space between text and vertical tab_button border]
-                "font":'#fa8100'
-            },
-            "map": {
-                "background": [("selected", '#ffffff')], # Tab color when selected
-                "expand": [("selected", [1, 1, 1, 0])] # text margins
-            }
-        }
-    })
-
-    style.theme_use('pastel')
+    style.theme_use('dark')
     form.geometry("1200x1200")
     tab_parent = ttk.Notebook(form)
     tab = ttk.Frame(tab_parent)
