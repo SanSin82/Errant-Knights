@@ -247,7 +247,7 @@ def journal_entry(cmdr, is_beta, system, station, entry, index):
         try:
             gc = gspread.service_account(filename=this.cred)
             sh = gc.open("DAILY UPDATE")
-            worksheet = sh.worksheet("Master")
+            worksheet = sh.worksheet("Orders")
             system = this.TodayData[this.DataIndex.get()][0]['System']
             cell1 = worksheet.find(system)
             systemrow = cell1.row
@@ -359,7 +359,7 @@ def journal_entry(cmdr, is_beta, system, station, entry, index):
         try:
             gc = gspread.service_account(filename=this.cred)
             sh = gc.open("DAILY UPDATE")
-            worksheet = sh.worksheet("Master")
+            worksheet = sh.worksheet("Orders")
             system = this.TodayData[this.DataIndex.get()][0]['System']
             cell1 = worksheet.find(system)
             systemrow = cell1.row
@@ -370,15 +370,6 @@ def journal_entry(cmdr, is_beta, system, station, entry, index):
             czcell = worksheet.cell(systemrow, 6).value
             gc = gspread.service_account(filename=this.cred)
             sh = gc.open("DAILY UPDATE")
-            worksheet = sh.worksheet("Master")
-            system = this.TodayData[this.DataIndex.get()][0]['System']
-            cell1 = worksheet.find(system)
-            systemrow = cell1.row
-            pcell = worksheet.cell(systemrow, 2).value
-            fcell = worksheet.cell(systemrow, 3).value
-            wcell = worksheet.cell(systemrow, 4).value
-            gcell = worksheet.cell(systemrow, 5).value
-            czcell = worksheet.cell(systemrow, 6).value
             this.MasterPriority.set(pcell)
             this.MasterFaction.set(fcell)
             this.MasterWork.set(wcell)
