@@ -321,7 +321,29 @@ def journal_entry(cmdr, is_beta, system, station, entry, index):
                 this.MasterCZFaction.set('NONE')
 
         except KeyError:
-            Return
+            try:
+                gc = gspread.service_account(filename=this.cred)
+                sh = gc.open("DAILY UPDATE")
+                worksheet = sh.worksheet("Orders")
+                system = this.TodayData[this.DataIndex.get()][0]['System']
+                cell1 = worksheet.find(system)
+                systemrow = cell1.row
+                pcell = worksheet.cell(systemrow, 2).value
+                fcell = worksheet.cell(systemrow, 3).value
+                wcell = worksheet.cell(systemrow, 4).value
+                gcell = worksheet.cell(systemrow, 5).value
+                czcell = worksheet.cell(systemrow, 6).value
+                this.MasterPriority.set(pcell)
+                this.MasterFaction.set(fcell)
+                this.MasterWork.set(wcell)
+                this.MasterGoal.set(gcell)
+                this.MasterCZFaction.set(czcell)
+            except gspread.exceptions.CellNotFound:
+                this.MasterPriority.set('NONE')
+                this.MasterFaction.set('NONE')
+                this.MasterWork.set('NONE')
+                this.MasterGoal.set('NONE')
+                this.MasterCZFaction.set('NONE')
 
     if entry['event'] == 'FSDJump':  # get factions at jump, load into today data, check tick and reset if needed
 
@@ -437,7 +459,29 @@ def journal_entry(cmdr, is_beta, system, station, entry, index):
                 this.MasterCZFaction.set('NONE')
 
         except KeyError:
-            Return
+            try:
+                gc = gspread.service_account(filename=this.cred)
+                sh = gc.open("DAILY UPDATE")
+                worksheet = sh.worksheet("Orders")
+                system = this.TodayData[this.DataIndex.get()][0]['System']
+                cell1 = worksheet.find(system)
+                systemrow = cell1.row
+                pcell = worksheet.cell(systemrow, 2).value
+                fcell = worksheet.cell(systemrow, 3).value
+                wcell = worksheet.cell(systemrow, 4).value
+                gcell = worksheet.cell(systemrow, 5).value
+                czcell = worksheet.cell(systemrow, 6).value
+                this.MasterPriority.set(pcell)
+                this.MasterFaction.set(fcell)
+                this.MasterWork.set(wcell)
+                this.MasterGoal.set(gcell)
+                this.MasterCZFaction.set(czcell)
+            except gspread.exceptions.CellNotFound:
+                this.MasterPriority.set('NONE')
+                this.MasterFaction.set('NONE')
+                this.MasterWork.set('NONE')
+                this.MasterGoal.set('NONE')
+                this.MasterCZFaction.set('NONE')
 
     if entry['event'] == 'RedeemVoucher' and entry['Type'] == 'bounty':  # bounties collected
         t = len(this.TodayData[this.DataIndex.get()][0]['Factions'])
