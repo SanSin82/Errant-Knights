@@ -184,6 +184,30 @@ def journal_entry(cmdr, is_beta, system, station, entry, index):
     if entry['event'] == 'Docked':
         this.StationFaction.set(entry['StationFaction']['Name'])  # set station controlling faction name
 
+        try:
+            gc = gspread.service_account(filename=this.cred)
+            sh = gc.open("DAILY UPDATE")
+            worksheet = sh.worksheet("Orders")
+            system = this.TodayData[this.DataIndex.get()][0]['System']
+            cell1 = worksheet.find(system)
+            systemrow = cell1.row
+            pcell = worksheet.cell(systemrow, 2).value
+            fcell = worksheet.cell(systemrow, 3).value
+            wcell = worksheet.cell(systemrow, 4).value
+            gcell = worksheet.cell(systemrow, 5).value
+            czcell = worksheet.cell(systemrow, 6).value
+            this.MasterPriority.set(pcell)
+            this.MasterFaction.set(fcell)
+            this.MasterWork.set(wcell)
+            this.MasterGoal.set(gcell)
+            this.MasterCZFaction.set(czcell)
+        except gspread.exceptions.CellNotFound:
+            this.MasterPriority.set('NONE')
+            this.MasterFaction.set('NONE')
+            this.MasterWork.set('NONE')
+            this.MasterGoal.set('NONE')
+            this.MasterCZFaction.set('NONE')
+
     if entry['event'] == 'Location':
         try:
             if this.SystemFaction != entry['SystemFaction']['Name']:
@@ -270,33 +294,34 @@ def journal_entry(cmdr, is_beta, system, station, entry, index):
                                                                      'CZ Med': 0,
                                                                      'CZ Low': 0})
 
-        except KeyError:
-
             sheet_insert_new_system(x + 1)  # insert data into google sheet
 
-        try:
-            gc = gspread.service_account(filename=this.cred)
-            sh = gc.open("DAILY UPDATE")
-            worksheet = sh.worksheet("Orders")
-            system = this.TodayData[this.DataIndex.get()][0]['System']
-            cell1 = worksheet.find(system)
-            systemrow = cell1.row
-            pcell = worksheet.cell(systemrow, 2).value
-            fcell = worksheet.cell(systemrow, 3).value
-            wcell = worksheet.cell(systemrow, 4).value
-            gcell = worksheet.cell(systemrow, 5).value
-            czcell = worksheet.cell(systemrow, 6).value
-            this.MasterPriority.set(pcell)
-            this.MasterFaction.set(fcell)
-            this.MasterWork.set(wcell)
-            this.MasterGoal.set(gcell)
-            this.MasterCZFaction.set(czcell)
+            try:
+                gc = gspread.service_account(filename=this.cred)
+                sh = gc.open("DAILY UPDATE")
+                worksheet = sh.worksheet("Orders")
+                system = this.TodayData[this.DataIndex.get()][0]['System']
+                cell1 = worksheet.find(system)
+                systemrow = cell1.row
+                pcell = worksheet.cell(systemrow, 2).value
+                fcell = worksheet.cell(systemrow, 3).value
+                wcell = worksheet.cell(systemrow, 4).value
+                gcell = worksheet.cell(systemrow, 5).value
+                czcell = worksheet.cell(systemrow, 6).value
+                this.MasterPriority.set(pcell)
+                this.MasterFaction.set(fcell)
+                this.MasterWork.set(wcell)
+                this.MasterGoal.set(gcell)
+                this.MasterCZFaction.set(czcell)
+            except gspread.exceptions.CellNotFound:
+                this.MasterPriority.set('NONE')
+                this.MasterFaction.set('NONE')
+                this.MasterWork.set('NONE')
+                this.MasterGoal.set('NONE')
+                this.MasterCZFaction.set('NONE')
+
         except KeyError:
-            this.MasterPriority.set('NONE')
-            this.MasterFaction.set('NONE')
-            this.MasterWork.set('NONE')
-            this.MasterGoal.set('NONE')
-            this.MasterCZFaction.set('NONE')
+            Return
 
     if entry['event'] == 'FSDJump':  # get factions at jump, load into today data, check tick and reset if needed
 
@@ -385,35 +410,34 @@ def journal_entry(cmdr, is_beta, system, station, entry, index):
                                                                      'CZ Med': 0,
                                                                      'CZ Low': 0})
 
-        except KeyError:
-
             sheet_insert_new_system(x + 1)  # insert data into google sheet
 
-        try:
-            gc = gspread.service_account(filename=this.cred)
-            sh = gc.open("DAILY UPDATE")
-            worksheet = sh.worksheet("Orders")
-            system = this.TodayData[this.DataIndex.get()][0]['System']
-            cell1 = worksheet.find(system)
-            systemrow = cell1.row
-            pcell = worksheet.cell(systemrow, 2).value
-            fcell = worksheet.cell(systemrow, 3).value
-            wcell = worksheet.cell(systemrow, 4).value
-            gcell = worksheet.cell(systemrow, 5).value
-            czcell = worksheet.cell(systemrow, 6).value
-            gc = gspread.service_account(filename=this.cred)
-            sh = gc.open("DAILY UPDATE")
-            this.MasterPriority.set(pcell)
-            this.MasterFaction.set(fcell)
-            this.MasterWork.set(wcell)
-            this.MasterGoal.set(gcell)
-            this.MasterCZFaction.set(czcell)
-        except:
-            this.MasterPriority.set('NONE')
-            this.MasterFaction.set('NONE')
-            this.MasterWork.set('NONE')
-            this.MasterGoal.set('NONE')
-            this.MasterCZFaction.set('NONE')
+            try:
+                gc = gspread.service_account(filename=this.cred)
+                sh = gc.open("DAILY UPDATE")
+                worksheet = sh.worksheet("Orders")
+                system = this.TodayData[this.DataIndex.get()][0]['System']
+                cell1 = worksheet.find(system)
+                systemrow = cell1.row
+                pcell = worksheet.cell(systemrow, 2).value
+                fcell = worksheet.cell(systemrow, 3).value
+                wcell = worksheet.cell(systemrow, 4).value
+                gcell = worksheet.cell(systemrow, 5).value
+                czcell = worksheet.cell(systemrow, 6).value
+                this.MasterPriority.set(pcell)
+                this.MasterFaction.set(fcell)
+                this.MasterWork.set(wcell)
+                this.MasterGoal.set(gcell)
+                this.MasterCZFaction.set(czcell)
+            except gspread.exceptions.CellNotFound:
+                this.MasterPriority.set('NONE')
+                this.MasterFaction.set('NONE')
+                this.MasterWork.set('NONE')
+                this.MasterGoal.set('NONE')
+                this.MasterCZFaction.set('NONE')
+
+        except KeyError:
+            Return
 
     if entry['event'] == 'RedeemVoucher' and entry['Type'] == 'bounty':  # bounties collected
         t = len(this.TodayData[this.DataIndex.get()][0]['Factions'])
@@ -577,6 +601,56 @@ def journal_entry(cmdr, is_beta, system, station, entry, index):
                 sheet_commit_data(system, index, 'MissionFailed', data)
             save_data()
         worksheet.delete_row(missionrow)
+
+    if entry['event'] == 'SupercruiseEntry':
+        try:
+            gc = gspread.service_account(filename=this.cred)
+            sh = gc.open("DAILY UPDATE")
+            worksheet = sh.worksheet("Orders")
+            system = entry['StarSystem']
+            cell1 = worksheet.find(system)
+            systemrow = cell1.row
+            pcell = worksheet.cell(systemrow, 2).value
+            fcell = worksheet.cell(systemrow, 3).value
+            wcell = worksheet.cell(systemrow, 4).value
+            gcell = worksheet.cell(systemrow, 5).value
+            czcell = worksheet.cell(systemrow, 6).value
+            this.MasterPriority.set(pcell)
+            this.MasterFaction.set(fcell)
+            this.MasterWork.set(wcell)
+            this.MasterGoal.set(gcell)
+            this.MasterCZFaction.set(czcell)
+        except gspread.exceptions.CellNotFound:
+            this.MasterPriority.set('NONE')
+            this.MasterFaction.set('NONE')
+            this.MasterWork.set('NONE')
+            this.MasterGoal.set('NONE')
+            this.MasterCZFaction.set('NONE')
+
+    if entry['event'] == 'SupercruiseExit':
+        try:
+            gc = gspread.service_account(filename=this.cred)
+            sh = gc.open("DAILY UPDATE")
+            worksheet = sh.worksheet("Orders")
+            system = entry['StarSystem']
+            cell1 = worksheet.find(system)
+            systemrow = cell1.row
+            pcell = worksheet.cell(systemrow, 2).value
+            fcell = worksheet.cell(systemrow, 3).value
+            wcell = worksheet.cell(systemrow, 4).value
+            gcell = worksheet.cell(systemrow, 5).value
+            czcell = worksheet.cell(systemrow, 6).value
+            this.MasterPriority.set(pcell)
+            this.MasterFaction.set(fcell)
+            this.MasterWork.set(wcell)
+            this.MasterGoal.set(gcell)
+            this.MasterCZFaction.set(czcell)
+        except gspread.exceptions.CellNotFound:
+            this.MasterPriority.set('NONE')
+            this.MasterFaction.set('NONE')
+            this.MasterWork.set('NONE')
+            this.MasterGoal.set('NONE')
+            this.MasterCZFaction.set('NONE')
 
 
 def high_cz():
