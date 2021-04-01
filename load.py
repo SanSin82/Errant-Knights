@@ -75,14 +75,6 @@ def plugin_prefs(parent, cmdr, is_beta):
                    offvalue="Paused").grid()
     return frame
 
-
-def prefs_changed():
-    """
-   Save settings.
-   """
-    this.Status_Label["text"] = this.Status.get()
-
-
 def plugin_start(plugin_dir):
     """
    Load this plugin into EDMC
@@ -109,7 +101,7 @@ def plugin_start(plugin_dir):
     # this.LastTick.set("12")
 
     #  tick check and counter reset
-    response = requests.get('https://elitebgs.app/api/ebgs/v4/ticks')  # get current tick and reset if changed
+    response = requests.get('https://elitebgs.app/api/ebgs/v5/ticks')  # get current tick and reset if changed
     tick = response.json()
     this.CurrentTick = tick[0]['_id']
     this.TickTime = tick[0]['time']
@@ -122,7 +114,7 @@ def plugin_start(plugin_dir):
     # create google sheet
     google_sheet_int()
 
-    return "Errant Knights v1"
+    return "Errant Knights v2"
 
 
 def plugin_start3(plugin_dir):
@@ -216,7 +208,7 @@ def journal_entry(cmdr, is_beta, system, station, entry, index):
             this.SystemFaction.set('Unpopulated')
 
         #  tick check and counter reset
-        response = requests.get('https://elitebgs.app/api/ebgs/v4/ticks')  # get current tick and reset if changed
+        response = requests.get('https://elitebgs.app/api/ebgs/v5/ticks')  # get current tick and reset if changed
         tick = response.json()
         this.CurrentTick = tick[0]['_id']
         this.TickTime = tick[0]['time']
@@ -354,7 +346,7 @@ def journal_entry(cmdr, is_beta, system, station, entry, index):
             this.SystemFaction.set('Unpopulated')
 
         #  tick check and counter reset
-        response = requests.get('https://elitebgs.app/api/ebgs/v4/ticks')  # get current tick and reset if changed
+        response = requests.get('https://elitebgs.app/api/ebgs/v5/ticks')  # get current tick and reset if changed
         tick = response.json()
         this.CurrentTick = tick[0]['_id']
         this.TickTime = tick[0]['time']
